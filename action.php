@@ -3,68 +3,51 @@
     require_once 'class/Registration.php';
     $dbaction = new Registration;
 
+    // Check if Sign-up button is pressed
     if(isset($_POST['signup-btn']))
     {
         $fname = $_POST['fname'];
         $email = $_POST['email'];
         $password =  password_hash($_POST['password'], PASSWORD_DEFAULT);
         $token = md5(uniqid(rand()));
-        $dbaction->register($fname, $email, $password, $token);
+        $subject = "Activate Your Account";
+
+        // Write Email
+        $mailBody = 
+        "Hello <strong> $fname</strong>, <br>
+        Welcome to [Companyname]. <br>
+        To activate your user account, please Click the button bellow. <br>
+        <a style='padding: 5px 34px; background: green; color: white; border: none; width: 150px; height: 50px; display: block; line-height: 50px; text-decoration: none;' href='http://localhost/mahadi/signup-with-email-verification/activate.php?email=$email&token=$token'>Click here to activate</a><br>
+        If the lnk doesn't work, copy and paste the link on your browser.<br>
+        http://localhost/mahadi/signup-with-email-verification/activate.php?email=$email&token=$token
+        ";
+
+        $dbaction->register($fname, $email, $password, $token, $subject, $mailBody);
         header('Location: signup.php');
-
     }
+    else if(isset($_POST['signin-btn'])) // Check if Sign in Button is pressed
+    {       
+        $email = $_POST['email'];
+        $password = $_POST['password'];
 
-
-    if(isset($_POST['recipient']))
-    {
-        
-        require_once 'class/class.phpmailer.php';
-        require_once 'class/class.smtp.php';
-
-        $mail = new PHPMailer;
-
-        // Email address from user input
-        $recipient = $_POST['recipient'];
-        $subject = $_POST['subject'];
-        $body = $_POST['body'];
-
-        //$mail->SMTPDebug = 3;                               // Enable verbose debug output
-
-        $mail->isSMTP();                                      // Set mailer to use SMTP
-        $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
-        $mail->SMTPAuth = true;                               // Enable SMTP authentication
-        $mail->Username = 'yourmail@email.com';                 // SMTP username
-        $mail->Password = 'your-password-of-email';                           // SMTP password
-        $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
-        $mail->Port = 587;                                    // TCP port to connect to
-
-        $mail->setFrom('yourmail@email.com', 'Your Name/Brand Name');
-        $mail->addAddress($recipient);               // Add recipient
-        $mail->addReplyTo('yourmail@email.com', 'Your Name/Brand Name');
-
-        $mail->isHTML(true);                                  // Set email format to HTML
-
-        $mail->Subject = $subject;
-        $mail->Body    = $body;
-
-        //If email send fail, show error message, otherwise show success message (through SESSION)
-        if(!$mail->send()) 
+        $status = $dbaction->signin($email, $password);
+        if($status == true)
         {
-            $_SESSION['error'] = 'Message could not be sent.  Error: ' . $mail->ErrorInfo;
-            header('Location: index.php');
-        } 
-        else 
+            header('Location: dashboard.php');
+        }
+        else
         {
-            $_SESSION['success'] = 'Message is sent.';
             header('Location: index.php');
         }
         
-    }
+
+    }        
     else
     {
-
+        // if someone tried to access directly via URL, redirect to the login page
+        header('Location: index.php');
     }
-
+    
     
 
 ?>

@@ -48,10 +48,13 @@
             <div class="col-6 mx-auto mt-5 p-5 broder">
                 <h2 class="display-4 text-primary text-center">Sign up</h2>
                 <?php
-                    if (isset($_SESSION['success'])) {
+                    if (isset($_SESSION['success'])) 
+                    {
                         echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
                         session_destroy();
-                    } else if (isset($_SESSION['err'])) {
+                    } 
+                    else if (isset($_SESSION['err'])) 
+                    {
                         echo '<div class="alert alert-danger">' . $_SESSION['err'] . '</div>';
                         session_destroy();
                     }
@@ -73,7 +76,7 @@
                         <input type="password" name="password" class="form-control rounded-0" placeholder="********" id="password-field" required>
                     </div>
 
-                    <button type="submit" name="signup-btn" class="btn btn-primary rounded-0">Signin</button>
+                    <button type="submit" name="signup-btn" class="btn btn-primary rounded-0">Signup</button>
 
                     <a href="index.php" class="btn btn-outline-success rounded-0">Already have a account? Sign in</a>
                 </form>

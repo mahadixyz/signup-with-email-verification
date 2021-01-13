@@ -50,10 +50,10 @@
                 <?php
                     if (isset($_SESSION['success'])) {
                         echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
-                        session_destroy();
+                        unset($_SESSION['success']);
                     } else if (isset($_SESSION['error'])) {
                         echo '<div class="alert alert-danger">' . $_SESSION['error'] . '</div>';
-                        session_destroy();
+                        unset($_SESSION['error']);
                     }
                 ?>
                 <form action="action.php" method="POST">

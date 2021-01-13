@@ -1,9 +1,13 @@
 <?php
-    session_start();
-    if(!isset($_SESSION['user_name']))
+    require_once 'class/Registration.php';
+    $dashboard = new Registration;
+
+    if(!isset($_SESSION['user_id']))
     {
         header('Location: index.php');
     }
+
+    $result = $dashboard->viewData($_SESSION['user_id']);
 ?>
 
 <!doctype html>
@@ -17,7 +21,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 
-    <title>Homepage</title>
+    <title>Dashboard</title>
 </head>
 
 <body>
@@ -37,7 +41,7 @@
                     </li> 
 
                     <li class="nav-item">
-                        <a class="nav-link" href="signout.php">Sign out</a>
+                        <a class="nav-link" href="sign-out.php">Sign out</a>
                     </li>                    
                    
                 </ul>
@@ -50,7 +54,34 @@
         <div class="row">
 
             <div class="col-6 mx-auto mt-5 p-5 broder">
+            
+                <?php
+                    if (isset($_SESSION['success'])) 
+                    {
+                        echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
+                        unset($_SESSION['success']);
+                    } 
+                    else if (isset($_SESSION['error'])) 
+                    {
+                        echo '<div class="alert alert-danger">' . $_SESSION['error'] . '</div>';
+                        unset($_SESSION['error']);
+                    }
                
+                    if($result != false)
+                    {
+                        foreach($result as $data)
+                        { 
+                                                              
+                            
+                ?>
+                    <div class="border p-5">
+                            <h3 class="text-center">Welcome, <?=$data->user_fullname?> </h3>
+                            <a class="btn btn-danger d-grid mx-auto rounded-0 mt-5" href="sign-out.php">Sign out</a>
+                    </div>
+                <?php                                                            
+                        }
+                    }
+                ?>
 
             </div>
 
