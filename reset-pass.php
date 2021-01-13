@@ -5,11 +5,16 @@
 
     if(isset($_GET['email'], $_GET['token']))
     {
-        $email = $_GET['email'];
-        $token = $_GET['token'];
+        $_SESSION['email'] = $_GET['email'];
+        $_SESSION['token'] = $_GET['token'];
+    }
+    
+    if(isset($_SESSION['email'], $_SESSION['token']))
+    {
+        $email = $_SESSION['email'];
+        $token = $_SESSION['token'];
 
         $status = $reset->checkMailToken($email, $token);
-
         if($status != false)
         {
             if(isset($_POST['pass-reset']))
@@ -18,10 +23,11 @@
                 $cpass = $_POST['cPassword'];
                 if($pass === $cpass)
                 {
-                    $status = $reset->resetPass($email, $pass, $token);
+                    $password = password_hash($pass, PASSWORD_DEFAULT);
+                    $status = $reset->resetPass($email, $password, $token);
                     if($status != false)
                     {
-                        $_SESSION['success'] = "Password changed. Please Log in with new password";
+                        $_SESSION['success'] = 'Password changed. Please Log in with new password <a href="index.php" class="alert-link">login</a> now';
                     }
                     else
                     {
@@ -33,11 +39,7 @@
                 {
                     $_SESSION['error'] = "Password doesn't match";
                 }
-            }
-            else
-            {
-                $_SESSION['error'] = "Both fields are required";
-            }
+            }           
         }
         else
         {
@@ -72,15 +74,18 @@
 
             <div class="col-6 mx-auto mt-5 p-5 broder">
             <?php
-                if (isset($_SESSION['success'])) {
+                if (isset($_SESSION['success'])) 
+                {
                     echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
                     unset($_SESSION['success']);
-                } else if (isset($_SESSION['error'])) {
-                    echo '<div class="alert alert-danger">' . $_SESSION['error'] . '</div>';
+                }
+                else if (isset($_SESSION['error'])) 
+                {
+                    echo '<div class="alert alert-danger">' .$_SESSION['error'].'</div>';
                     unset($_SESSION['error']);
                 }
             ?>
-            <form action="password-recover.php" method="POST">
+            <form action="reset-pass.php" method="POST">
 
                 <div class="mb-3">
                     <label for="password-field" class="form-label">New Password</label>

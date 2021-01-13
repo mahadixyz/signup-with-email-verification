@@ -19,13 +19,21 @@
                 }
 
                 // Write Email
+                // $mailBody = 
+                // "Hello<br>
+                // Welcome to [Companyname]. <br>
+                // To reset your password, please Click the button bellow. <br>
+                // <a style='padding: 5px 34px; background: green; color: white; border: none; width: 150px; height: 50px; display: block; line-height: 50px; text-decoration: none;' href='http://localhost/mahadi/signup-with-email-verification/reset-pass.php?email=$email&token=$token'>Change Password</a><br>
+                // If the lnk doesn't work, copy and paste the link on your browser.<br>
+                // http://localhost/mahadi/signup-with-email-verification/reset-pass.php?email=$email&token=$token
+                // ";
                 $mailBody = 
-                "Hello <strong> $fname</strong>, <br>
+                "Hello<br>
                 Welcome to [Companyname]. <br>
                 To reset your password, please Click the button bellow. <br>
-                <a style='padding: 5px 34px; background: green; color: white; border: none; width: 150px; height: 50px; display: block; line-height: 50px; text-decoration: none;' href='http://localhost/mahadi/signup-with-email-verification/reset-pass.php?email=$email&token=$token'>Change Password</a><br>
+                <a style='padding: 5px 34px; background: green; color: white; border: none; width: 150px; height: 50px; display: block; line-height: 50px; text-decoration: none;' href='http://localhost/signup-with-email-verification/reset-pass.php?email=$email&token=$token'>Change Password</a><br>
                 If the lnk doesn't work, copy and paste the link on your browser.<br>
-                http://localhost/mahadi/signup-with-email-verification/reset-pass.php?email=$email&token=$token
+                http://localhost/signup-with-email-verification/reset-pass.php?email=$email&token=$token
                 ";
         
                 $mailStatus = $recoverPass->sendMail($email, $subject, $mailBody);
